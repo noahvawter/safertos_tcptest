@@ -23,6 +23,11 @@ SUBDIRS := \
 Common/Src \
 Core/Src \
 Core/Startup \
+Drivers/FreeRTOS-Plus-TCP/source \
+Drivers/FreeRTOS-Plus-TCP/source/portable/BufferManagement \
+Drivers/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/Common \
+Drivers/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/STM32Hxx \
+Drivers/FreeRTOS-Plus-TCP/tools/tcp_utilities \
 Drivers/STM32H7xx_HAL_Driver \
 Middlewares/Third_Party/FreeRTOS \
 

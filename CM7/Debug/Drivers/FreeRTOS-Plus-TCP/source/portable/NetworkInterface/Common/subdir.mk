@@ -5,44 +5,23 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Core/Src/freertos.c \
-../Core/Src/main.c \
-../Core/Src/noah.c \
-../Core/Src/stm32h7xx_hal_msp.c \
-../Core/Src/stm32h7xx_hal_timebase_tim.c \
-../Core/Src/stm32h7xx_it.c \
-../Core/Src/syscalls.c \
-../Core/Src/sysmem.c 
+../Drivers/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/Common/phyHandling.c 
 
 OBJS += \
-./Core/Src/freertos.o \
-./Core/Src/main.o \
-./Core/Src/noah.o \
-./Core/Src/stm32h7xx_hal_msp.o \
-./Core/Src/stm32h7xx_hal_timebase_tim.o \
-./Core/Src/stm32h7xx_it.o \
-./Core/Src/syscalls.o \
-./Core/Src/sysmem.o 
+./Drivers/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/Common/phyHandling.o 
 
 C_DEPS += \
-./Core/Src/freertos.d \
-./Core/Src/main.d \
-./Core/Src/noah.d \
-./Core/Src/stm32h7xx_hal_msp.d \
-./Core/Src/stm32h7xx_hal_timebase_tim.d \
-./Core/Src/stm32h7xx_it.d \
-./Core/Src/syscalls.d \
-./Core/Src/sysmem.d 
+./Drivers/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/Common/phyHandling.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
-Core/Src/%.o: ../Core/Src/%.c Core/Src/subdir.mk
+Drivers/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/Common/%.o: ../Drivers/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/Common/%.c Drivers/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/Common/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DCORE_CM7 -DUSE_HAL_DRIVER -DSTM32H745xx -c -I../Core/Inc -I../../Drivers/STM32H7xx_HAL_Driver/Inc -I../../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I../../Middlewares/Third_Party/FreeRTOS/Source/include -I../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -I../../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I../../Drivers/CMSIS/Include -I"/home/nvawter/STM32CubeIDE/workspace_2_0/test_04/CM7/Drivers/FreeRTOS-Plus-TCP/source/portable/Compiler/GCC" -I"/home/nvawter/STM32CubeIDE/workspace_2_0/test_04/CM7/Core/Inc" -I"/home/nvawter/STM32CubeIDE/workspace_2_0/test_04/CM7/Drivers/FreeRTOS-Plus-TCP/tools/tcp_utilities/include" -I"/home/nvawter/STM32CubeIDE/workspace_2_0/test_04/CM7/Drivers/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/include" -I"/home/nvawter/STM32CubeIDE/workspace_2_0/test_04/CM7/Drivers/FreeRTOS-Plus-TCP/include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "$@"
 
-clean: clean-Core-2f-Src
+clean: clean-Drivers-2f-FreeRTOS-2d-Plus-2d-TCP-2f-source-2f-portable-2f-NetworkInterface-2f-Common
 
-clean-Core-2f-Src:
-	-$(RM) ./Core/Src/freertos.d ./Core/Src/freertos.o ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/noah.d ./Core/Src/noah.o ./Core/Src/stm32h7xx_hal_msp.d ./Core/Src/stm32h7xx_hal_msp.o ./Core/Src/stm32h7xx_hal_timebase_tim.d ./Core/Src/stm32h7xx_hal_timebase_tim.o ./Core/Src/stm32h7xx_it.d ./Core/Src/stm32h7xx_it.o ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/sysmem.d ./Core/Src/sysmem.o
+clean-Drivers-2f-FreeRTOS-2d-Plus-2d-TCP-2f-source-2f-portable-2f-NetworkInterface-2f-Common:
+	-$(RM) ./Drivers/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/Common/phyHandling.d ./Drivers/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/Common/phyHandling.o
 
-.PHONY: clean-Core-2f-Src
+.PHONY: clean-Drivers-2f-FreeRTOS-2d-Plus-2d-TCP-2f-source-2f-portable-2f-NetworkInterface-2f-Common
 
