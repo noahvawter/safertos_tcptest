@@ -24,6 +24,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "noah.h"
+#include "FreeRTOS_IP.h"
+#include "FreeRTOSIPConfig.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,6 +97,12 @@ void StartDefaultTask(void *argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+static uint8_t ucMACAddress[ 6 ] = { 0x00, 0x11, 0x22, 0x33, 0x44, 0x55 };
+static const uint8_t ucIPAddress[ 4 ] = { 10, 10, 10, 200 };
+static const uint8_t ucNetMask[ 4 ] = { 255, 0, 0, 0 };
+static const uint8_t ucGatewayAddress[ 4 ] = { 10, 10, 10, 1 };
+static const uint8_t ucDNSServerAddress[ 4 ] = { 208, 67, 222, 222 };
 
 /* USER CODE END 0 */
 
@@ -191,7 +199,8 @@ Error_Handler();
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
-  /* add events, ... */
+  FreeRTOS_IPInit( ucIPAddress, ucNetMask, ucGatewayAddress, ucDNSServerAddress, ucMACAddress );
+
   /* USER CODE END RTOS_EVENTS */
 
   /* Start scheduler */
