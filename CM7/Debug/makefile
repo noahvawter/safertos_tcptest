@@ -9,13 +9,13 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include Middlewares/Third_Party/FreeRTOS-Plus-TCP/tools/tcp_utilities/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS-Plus-TCP/portable/NetworkInterface/STM32Hxx/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS-Plus-TCP/portable/NetworkInterface/Common/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS-Plus-TCP/portable/BufferManagement/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS-Plus-TCP/subdir.mk
 -include Middlewares/Third_Party/FreeRTOS/subdir.mk
 -include Drivers/STM32H7xx_HAL_Driver/subdir.mk
--include Drivers/FreeRTOS-Plus-TCP/tools/tcp_utilities/subdir.mk
--include Drivers/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/STM32Hxx/subdir.mk
--include Drivers/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/Common/subdir.mk
--include Drivers/FreeRTOS-Plus-TCP/source/portable/BufferManagement/subdir.mk
--include Drivers/FreeRTOS-Plus-TCP/source/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
 -include Common/Src/subdir.mk
@@ -61,7 +61,8 @@ test_04_CM7.bin \
 
 
 # All Target
-all: main-build
+all:
+	+@$(MAKE) --no-print-directory pre-build && $(MAKE) --no-print-directory main-build
 
 # Main-build Target
 main-build: test_04_CM7.elf secondary-outputs
@@ -92,6 +93,10 @@ clean:
 	-$(RM) default.size.stdout test_04_CM7.bin test_04_CM7.elf test_04_CM7.list
 	-@echo ' '
 
+pre-build:
+	make clean
+	-@echo ' '
+
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
 
 fail-specified-linker-script-missing:
@@ -101,6 +106,6 @@ fail-specified-linker-script-missing:
 warn-no-linker-script-specified:
 	@echo 'Warning: No linker script specified. Check the linker settings in the build configuration.'
 
-.PHONY: all clean dependents main-build fail-specified-linker-script-missing warn-no-linker-script-specified
+.PHONY: all clean dependents main-build fail-specified-linker-script-missing warn-no-linker-script-specified pre-build
 
 -include ../makefile.targets

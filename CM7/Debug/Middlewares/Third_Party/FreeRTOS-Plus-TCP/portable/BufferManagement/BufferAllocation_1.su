@@ -1,0 +1,10 @@
+BufferAllocation_1.c:152:24:bIsValidNetworkDescriptor	16	static
+BufferAllocation_1.c:159:17:prvShowWarnings	4	static
+BufferAllocation_1.c:166:12:xNetworkBuffersInitialise	24	static,ignoring_inline_asm
+BufferAllocation_1.c:231:29:pxGetNetworkBufferWithDescriptor	32	static,ignoring_inline_asm
+BufferAllocation_1.c:319:29:pxNetworkBufferGetFromISR	40	static,ignoring_inline_asm
+BufferAllocation_1.c:357:12:vNetworkBufferReleaseFromISR	40	static,ignoring_inline_asm
+BufferAllocation_1.c:376:6:vReleaseNetworkBufferAndDescriptor	24	static
+BufferAllocation_1.c:417:13:uxGetMinimumFreeNetworkBuffers	4	static
+BufferAllocation_1.c:423:13:uxGetNumberOfFreeNetworkBuffers	4	static
+BufferAllocation_1.c:428:29:pxResizeNetworkBufferWithDescriptor	16	static

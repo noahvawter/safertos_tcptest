@@ -16,6 +16,9 @@
   *
   ******************************************************************************
   */
+#define HAL_ETH_MODULE_ENABLED
+#define USE_HAL_ETH_REGISTER_CALLBACKS     0U /* ETH register callback disabled     */
+
 /* USER CODE END Header */
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef STM32H7xx_HAL_CONF_H
