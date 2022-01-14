@@ -16,7 +16,7 @@
   *
   ******************************************************************************
   */
-#define HAL_ETH_MODULE_ENABLED
+//#define HAL_ETH_MODULE_ENABLED
 #define USE_HAL_ETH_REGISTER_CALLBACKS     0U /* ETH register callback disabled     */
 
 /* USER CODE END Header */
