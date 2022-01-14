@@ -26,6 +26,7 @@
 #include "noah.h"
 #include "FreeRTOS_IP.h"
 #include "FreeRTOSIPConfig.h"
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -92,6 +93,96 @@ static void MX_ETH_Init(void);
 void StartDefaultTask(void *argument);
 
 /* USER CODE BEGIN PFP */
+#define mainDEVICE_NICK_NAME "noahmicro"
+const char *mainHOST_NAME = "noah2micro";
+
+
+/*
+ * Callback that provides the inputs necessary to generate a randomized TCP
+ * Initial Sequence Number per RFC 6528.  THIS IS ONLY A DUMMY IMPLEMENTATION
+ * THAT RETURNS A PSEUDO RANDOM NUMBER SO IS NOT INTENDED FOR USE IN PRODUCTION
+ * SYSTEMS.
+ */
+extern uint32_t ulApplicationGetNextSequenceNumber( uint32_t ulSourceAddress,
+                                                    uint16_t usSourcePort,
+                                                    uint32_t ulDestinationAddress,
+                                                    uint16_t usDestinationPort )
+{
+    ( void ) ulSourceAddress;
+    ( void ) usSourcePort;
+    ( void ) ulDestinationAddress;
+    ( void ) usDestinationPort;
+
+    return uxRand();
+}
+
+UBaseType_t uxRand( void )
+{
+    const uint32_t ulMultiplier = 0x015a4e35UL, ulIncrement = 1UL;
+    static UBaseType_t ulNextRand;
+
+    /* Utility function to generate a pseudo random number. */
+
+    ulNextRand = ( ulMultiplier * ulNextRand ) + ulIncrement;
+    return( ( int ) ( ulNextRand ) & 0x7fffUL );
+}
+
+BaseType_t xApplicationGetRandomNumber( uint32_t * pulNumber )
+{
+    *pulNumber = uxRand();
+
+    return pdTRUE;
+}
+
+
+void vApplicationPingReplyHook( ePingReplyStatus_t eStatus,
+                                uint16_t usIdentifier )
+{
+    /* Provide a stub for this function. */
+}
+
+void vApplicationIPNetworkEventHook( eIPCallbackEvent_t eNetworkEvent )
+{
+    static BaseType_t xTasksAlreadyCreated = pdFALSE;
+
+    /* If the network has just come up...*/
+    if( ( eNetworkEvent == eNetworkUp ) && ( xTasksAlreadyCreated == pdFALSE ) )
+    {
+        /* Do nothing. Just a stub. */
+
+        xTasksAlreadyCreated = pdTRUE;
+    }
+}
+
+const char * pcApplicationHostnameHook( void )
+{
+    /* This function will be called during the DHCP: the machine will be registered
+     * with an IP address plus this name. */
+    return mainHOST_NAME;
+}
+
+BaseType_t xApplicationDNSQueryHook( const char * pcName )
+{
+    BaseType_t xReturn;
+
+    /* Determine if a name lookup is for this node.  Two names are given
+     * to this node: that returned by pcApplicationHostnameHook() and that set
+     * by mainDEVICE_NICK_NAME. */
+    if( stricmp( pcName, pcApplicationHostnameHook() ) == 0 )
+    {
+        xReturn = pdPASS;
+    }
+    else if( stricmp( pcName, mainDEVICE_NICK_NAME ) == 0 )
+    {
+        xReturn = pdPASS;
+    }
+    else
+    {
+        xReturn = pdFAIL;
+    }
+
+    return xReturn;
+}
 
 /* USER CODE END PFP */
 
