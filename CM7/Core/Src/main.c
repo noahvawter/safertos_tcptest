@@ -190,10 +190,10 @@ BaseType_t xApplicationDNSQueryHook( const char * pcName )
 /* USER CODE BEGIN 0 */
 
 static uint8_t ucMACAddress[ 6 ] = { 0x00, 0x11, 0x22, 0x33, 0x44, 0x55 };
-static const uint8_t ucIPAddress[ 4 ] = { 10, 10, 10, 200 };
-static const uint8_t ucNetMask[ 4 ] = { 255, 0, 0, 0 };
-static const uint8_t ucGatewayAddress[ 4 ] = { 10, 10, 10, 1 };
-static const uint8_t ucDNSServerAddress[ 4 ] = { 208, 67, 222, 222 };
+static const uint8_t ucIPAddress[ 4 ]        = { 192, 168,   2,   2 };
+static const uint8_t ucNetMask[ 4 ]          = { 255, 255, 255,   0 };
+static const uint8_t ucGatewayAddress[ 4 ]   = { 192, 168,   2,   1 };
+static const uint8_t ucDNSServerAddress[ 4 ] = { 208,  67, 222, 222 };
 
 /* USER CODE END 0 */
 
