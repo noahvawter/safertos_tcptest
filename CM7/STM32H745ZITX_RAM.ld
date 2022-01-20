@@ -185,5 +185,15 @@ SECTIONS
     libgcc.a ( * )
   }
 
+ RAM3 (xrw)      : ORIGIN = 0x24040000, LENGTH = 0x8000
+ *
+ * .ethernet_data :
+ * {
+ *  PROVIDE_HIDDEN (__ethernet_data_start = .);
+ *  KEEP (*(SORT(.ethernet_data.*)))
+ *  KEEP (*(.ethernet_data*))
+ *  PROVIDE_HIDDEN (__ethernet_data_end = .);
+ * } >RAM3
+ 
   .ARM.attributes 0 : { *(.ARM.attributes) }
 }

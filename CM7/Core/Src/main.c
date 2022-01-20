@@ -27,6 +27,8 @@
 #include "FreeRTOS_IP.h"
 #include "FreeRTOSIPConfig.h"
 #include <stdio.h>
+void vStartSimpleTCPServerTasks( uint16_t usStackSize, UBaseType_t uxPriority );
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -65,9 +67,9 @@ __attribute__((at(0x300400c0))) uint8_t Rx_Buff[ETH_RX_DESC_CNT][ETH_MAX_PACKET_
 
 #elif defined ( __GNUC__ ) /* GNU Compiler */
 
-ETH_DMADescTypeDef DMARxDscrTab[ETH_RX_DESC_CNT] __attribute__((section(".RxDecripSection"))); /* Ethernet Rx DMA Descriptors */
-ETH_DMADescTypeDef DMATxDscrTab[ETH_TX_DESC_CNT] __attribute__((section(".TxDecripSection")));   /* Ethernet Tx DMA Descriptors */
-uint8_t Rx_Buff[ETH_RX_DESC_CNT][ETH_MAX_PACKET_SIZE] __attribute__((section(".RxArraySection"))); /* Ethernet Receive Buffers */
+ETH_DMADescTypeDef DMARxDscrTab[ETH_RX_DESC_CNT] __attribute__((section(".ethernet_data"), aligned( 32 ))); /* Ethernet Rx DMA Descriptors */
+ETH_DMADescTypeDef DMATxDscrTab[ETH_TX_DESC_CNT] __attribute__((section(".ethernet_data"), aligned( 32 )));   /* Ethernet Tx DMA Descriptors */
+uint8_t Rx_Buff[ETH_RX_DESC_CNT][ETH_MAX_PACKET_SIZE] __attribute__((section(".ethernet_data"), aligned( 32 ))); /* Ethernet Receive Buffers */
 
 #endif
 
@@ -189,10 +191,10 @@ BaseType_t xApplicationDNSQueryHook( const char * pcName )
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-static uint8_t ucMACAddress[ 6 ] = { 0x00, 0x11, 0x22, 0x33, 0x44, 0x55 };
-static const uint8_t ucIPAddress[ 4 ]        = { 192, 168,   2,   2 };
+static uint8_t ucMACAddress[ 6 ] = { 0x00, 0x80, 0xe1, 0x00, 0x00, 0x00 };
+static const uint8_t ucIPAddress[ 4 ]        = { 192, 168,   1,  10 };
 static const uint8_t ucNetMask[ 4 ]          = { 255, 255, 255,   0 };
-static const uint8_t ucGatewayAddress[ 4 ]   = { 192, 168,   2,   1 };
+static const uint8_t ucGatewayAddress[ 4 ]   = { 192, 168,   1,   1 };
 static const uint8_t ucDNSServerAddress[ 4 ] = { 208,  67, 222, 222 };
 
 /* USER CODE END 0 */
@@ -291,6 +293,7 @@ Error_Handler();
 
   /* USER CODE BEGIN RTOS_EVENTS */
   FreeRTOS_IPInit( ucIPAddress, ucNetMask, ucGatewayAddress, ucDNSServerAddress, ucMACAddress );
+  //vStartSimpleTCPServerTasks( 2000, 3 );
 
   /* USER CODE END RTOS_EVENTS */
 
@@ -417,6 +420,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOG_CLK_ENABLE();
 
 }
 

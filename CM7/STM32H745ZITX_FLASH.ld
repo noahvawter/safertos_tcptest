@@ -50,6 +50,8 @@ MEMORY
   RAM_D2 (xrw)   : ORIGIN = 0x30000000, LENGTH = 288K
   RAM_D3 (xrw)   : ORIGIN = 0x38000000, LENGTH = 64K
   ITCMRAM (xrw)  : ORIGIN = 0x00000000, LENGTH = 64K
+  RAM3 (xrw)     : ORIGIN = 0x30040000, LENGTH = 0x28000   
+/*  RAM3 (xrw)     : ORIGIN = 0x24040000, LENGTH = 0x28000  */
 }
 
 /* Sections */
@@ -175,6 +177,22 @@ SECTIONS
     . = . + _Min_Stack_Size;
     . = ALIGN(8);
   } >RAM_D1
+
+  .ethernet_data :
+  {
+  /*
+     . = ABSOLUTE(0x30040000);
+    *(.RxDecripSection)    
+    . = ABSOLUTE(0x30040060);
+    *(.TxDecripSection)
+    . = ABSOLUTE(0x30040200);
+    *(.RxArraySection) 
+  */
+    PROVIDE_HIDDEN (__ethernet_data_start = .);
+    KEEP (*(SORT(.ethernet_data.*)))
+    KEEP (*(.ethernet_data*))
+    PROVIDE_HIDDEN (__ethernet_data_end = .);
+  } >RAM3
 
   /* Remove information from the compiler libraries */
   /DISCARD/ :
