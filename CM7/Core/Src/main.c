@@ -67,9 +67,9 @@ __attribute__((at(0x300400c0))) uint8_t Rx_Buff[ETH_RX_DESC_CNT][ETH_MAX_PACKET_
 
 #elif defined ( __GNUC__ ) /* GNU Compiler */
 
-ETH_DMADescTypeDef DMARxDscrTab[ETH_RX_DESC_CNT] __attribute__((section(".ethernet_data"), aligned( 32 ))); /* Ethernet Rx DMA Descriptors */
-ETH_DMADescTypeDef DMATxDscrTab[ETH_TX_DESC_CNT] __attribute__((section(".ethernet_data"), aligned( 32 )));   /* Ethernet Tx DMA Descriptors */
-uint8_t Rx_Buff[ETH_RX_DESC_CNT][ETH_MAX_PACKET_SIZE] __attribute__((section(".ethernet_data"), aligned( 32 ))); /* Ethernet Receive Buffers */
+ETH_DMADescTypeDef DMARxDscrTab[ETH_RX_DESC_CNT] __attribute__((section(".RxDecripSection"))); /* Ethernet Rx DMA Descriptors */
+ETH_DMADescTypeDef DMATxDscrTab[ETH_TX_DESC_CNT] __attribute__((section(".TxDecripSection")));   /* Ethernet Tx DMA Descriptors */
+uint8_t Rx_Buff[ETH_RX_DESC_CNT][ETH_MAX_PACKET_SIZE] __attribute__((section(".RxArraySection"))); /* Ethernet Receive Buffers */
 
 #endif
 
@@ -293,7 +293,7 @@ Error_Handler();
 
   /* USER CODE BEGIN RTOS_EVENTS */
   FreeRTOS_IPInit( ucIPAddress, ucNetMask, ucGatewayAddress, ucDNSServerAddress, ucMACAddress );
-  //vStartSimpleTCPServerTasks( 2000, 3 );
+  vStartSimpleTCPServerTasks( 2000, 3 );
 
   /* USER CODE END RTOS_EVENTS */
 
