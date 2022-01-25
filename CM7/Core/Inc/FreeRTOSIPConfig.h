@@ -388,6 +388,7 @@ messages. */
 
 #define ipconfigCHECK_IP_QUEUE_SPACE			1
 
+#define USE_IPERF                               1
 #define ipconfigIPERF_DOES_ECHO_UDP		        0
 
 #define ipconfigIPERF_VERSION					3

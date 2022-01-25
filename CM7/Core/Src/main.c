@@ -28,6 +28,7 @@
 #include "FreeRTOSIPConfig.h"
 #include <stdio.h>
 void vStartSimpleTCPServerTasks( uint16_t usStackSize, UBaseType_t uxPriority );
+#include "iperf_task.h"
 
 /* USER CODE END Includes */
 
@@ -151,6 +152,12 @@ void vApplicationIPNetworkEventHook( eIPCallbackEvent_t eNetworkEvent )
     if( ( eNetworkEvent == eNetworkUp ) && ( xTasksAlreadyCreated == pdFALSE ) )
     {
         /* Do nothing. Just a stub. */
+
+    	if (xTasksAlreadyCreated == pdFALSE) {
+    				vIPerfInstall();
+    				//vUDPLoggingTaskCreate();
+    				//xTasksAlreadyCreated = pdTRUE;
+    			}
 
         xTasksAlreadyCreated = pdTRUE;
     }
@@ -293,7 +300,7 @@ Error_Handler();
 
   /* USER CODE BEGIN RTOS_EVENTS */
   FreeRTOS_IPInit( ucIPAddress, ucNetMask, ucGatewayAddress, ucDNSServerAddress, ucMACAddress );
-  vStartSimpleTCPServerTasks( 2000, 3 );
+  //vStartSimpleTCPServerTasks( 2000, 3 );
 
   /* USER CODE END RTOS_EVENTS */
 
