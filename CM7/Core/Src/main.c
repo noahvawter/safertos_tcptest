@@ -300,7 +300,7 @@ Error_Handler();
 
   /* USER CODE BEGIN RTOS_EVENTS */
   FreeRTOS_IPInit( ucIPAddress, ucNetMask, ucGatewayAddress, ucDNSServerAddress, ucMACAddress );
-  //vStartSimpleTCPServerTasks( 2000, 3 );
+  vStartSimpleTCPServerTasks( 2000, 3 );
 
   /* USER CODE END RTOS_EVENTS */
 
