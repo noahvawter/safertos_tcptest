@@ -11,5 +11,8 @@
 
 void noah_hello( void );
 
+void vStartSimpleUDPServerTasks( uint16_t usStackSize, UBaseType_t uxPriority );
+
+void prvSimpleUDPServerTask( void *pvParameters );
 
 #endif /* INC_NOAH_H_ */
