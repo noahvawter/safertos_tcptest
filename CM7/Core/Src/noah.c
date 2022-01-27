@@ -34,6 +34,18 @@ void vStartSimpleUDPServerTasks( uint16_t usStackSize, UBaseType_t uxPriority )
 	usUsedStackSize = usStackSize;
 }
 
+
+void vStartSimpleUDPSenderTasks( uint16_t usStackSize, UBaseType_t uxPriority )
+{
+	/* Create the TCP echo server. */
+	xTaskCreate( vUDPSendingUsingZeroCopyInterface, "UDPSender", usStackSize, NULL, uxPriority + 1, NULL );
+
+	/* Remember the requested stack size so it can be re-used by the server
+	listening task when it creates tasks to handle connections. */
+	//usUsedStackSize = usStackSize;
+}
+
+
 void prvSimpleUDPServerTask( void *pvParameters )
 {
 long lBytes;
@@ -106,6 +118,87 @@ const TickType_t xSendTimeOut = 200 / portTICK_PERIOD_MS;
 		}
    }
 }
+
+
+void vUDPSendingUsingZeroCopyInterface( void *pvParameters )
+{
+Socket_t xSocket;
+uint8_t *pucBuffer;
+struct freertos_sockaddr xDestinationAddress;
+BaseType_t lReturned;
+uint32_t ulCount = 0UL;
+const uint8_t *pucStringToSend = "Zero copy send message number ";
+const TickType_t x1000ms = 1000UL / portTICK_PERIOD_MS;
+/* 15 is added to ensure the number, rn and terminating zero fit. */
+const size_t xStringLength = strlen( ( char * ) pucStringToSend ) + 15;
+
+   /* Send strings to port 10000 on IP address 192.168.0.50. */
+   xDestinationAddress.sin_addr = FreeRTOS_inet_addr( "192.168.1.1" );
+   xDestinationAddress.sin_port = FreeRTOS_htons( 6002 );
+
+   /* Create the socket. */
+   xSocket = FreeRTOS_socket( FREERTOS_AF_INET,
+                              FREERTOS_SOCK_DGRAM,/*FREERTOS_SOCK_DGRAM for UDP.*/
+                              FREERTOS_IPPROTO_UDP );
+
+   /* Check the socket was created. */
+   configASSERT( xSocket != FREERTOS_INVALID_SOCKET );
+
+   /* NOTE: FreeRTOS_bind() is not called.  This will only work if
+   ipconfigALLOW_SOCKET_SEND_WITHOUT_BIND is set to 1 in FreeRTOSIPConfig.h. */
+
+   for( ;; )
+   {
+       /* This RTOS task is going to send using the zero copy interface.  The
+       data being sent is therefore written directly into a buffer that is
+       passed into, rather than copied into, the FreeRTOS_sendto()
+       function.
+
+       First obtain a buffer of adequate length from the TCP/IP stack into which
+       the string will be written. */
+       pucBuffer = FreeRTOS_GetUDPPayloadBuffer( xStringLength, portMAX_DELAY );
+
+       /* Check a buffer was obtained. */
+       configASSERT( pucBuffer );
+
+       /* Create the string that is sent. */
+       memset( pucBuffer, 0x00, xStringLength );
+       sprintf( pucBuffer, "%s%lurn", pucStringToSend, ulCount );
+
+       /* Pass the buffer into the send function.  ulFlags has the
+       FREERTOS_ZERO_COPY bit set so the TCP/IP stack will take control of the
+       buffer rather than copy data out of the buffer. */
+       lReturned = FreeRTOS_sendto( xSocket,
+                                   ( void * ) pucBuffer,
+                                   strlen( ( const char * ) pucBuffer ) + 1,
+                                   FREERTOS_ZERO_COPY,
+                                   &xDestinationAddress,
+                                   sizeof( xDestinationAddress ) );
+
+       if( lReturned == 0 )
+       {
+           /* The send operation failed, so this RTOS task is still responsible
+           for the buffer obtained from the TCP/IP stack.  To ensure the buffer
+           is not lost it must either be used again, or, as in this case,
+           returned to the TCP/IP stack using FreeRTOS_ReleaseUDPPayloadBuffer().
+           pucBuffer can be safely re-used after this call. */
+           FreeRTOS_ReleaseUDPPayloadBuffer( ( void * ) pucBuffer );
+       }
+       else
+       {
+           /* The send was successful so the TCP/IP stack is now managing the
+           buffer pointed to by pucBuffer, and the TCP/IP stack will
+           return the buffer once it has been sent.  pucBuffer can
+           be safely re-used. */
+       }
+
+       ulCount++;
+
+       /* Wait until it is time to send again. */
+       vTaskDelay( x1000ms );
+   }
+}
+
 
 
 int32_t noah_packet_count = 0;

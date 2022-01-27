@@ -302,6 +302,7 @@ Error_Handler();
   FreeRTOS_IPInit( ucIPAddress, ucNetMask, ucGatewayAddress, ucDNSServerAddress, ucMACAddress );
   vStartSimpleTCPServerTasks( 2000, 3 );
   vStartSimpleUDPServerTasks( 2000, 3 );
+  vStartSimpleUDPSenderTasks( 2000, 3 );
 
   /* USER CODE END RTOS_EVENTS */
 
