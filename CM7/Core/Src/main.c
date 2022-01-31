@@ -300,9 +300,9 @@ Error_Handler();
 
   /* USER CODE BEGIN RTOS_EVENTS */
   FreeRTOS_IPInit( ucIPAddress, ucNetMask, ucGatewayAddress, ucDNSServerAddress, ucMACAddress );
-  vStartSimpleTCPServerTasks( 2000, 3 );
-  vStartSimpleUDPServerTasks( 2000, 3 );
-  vStartSimpleUDPSenderTasks( 2000, 3 );
+  vStartSimpleTCPServerTasks( 2000, 3 );    // TCP echo server
+  vStartSimpleUDPServerTasks( 2000, 3 );    // responds to incoming UDP w outgoing USP
+  vStartSimpleUDPSenderTasks( 2000, 3 );  // periodically sends a message
 
   /* USER CODE END RTOS_EVENTS */
 
