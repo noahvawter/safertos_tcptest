@@ -115,7 +115,7 @@ void prvSimpleUDPServerTask( void *pvParameters )
 		{
 			/* Data was received and can be processed here. */
 			noahSendTestString( xSocket, xDestinationAddress, "Made it across " );
-			noah_hello();
+			//noah_hello();
 		}
 
 		if( lBytes >= 0 )
@@ -124,7 +124,7 @@ void prvSimpleUDPServerTask( void *pvParameters )
 			the buffer.  The buffer must be freed once it is no longer
 			needed. */
 
-			noah_hello();
+			//noah_hello();
 
 			/*
 			 * The data can be processed here.
@@ -278,6 +278,8 @@ int32_t noahSendTestString( Socket_t xSocket, struct freertos_sockaddr xDestinat
 
 	return 1;
 }
+
+
 
 int32_t noah_packet_count = 0;
 

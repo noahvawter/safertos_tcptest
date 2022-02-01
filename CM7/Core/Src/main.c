@@ -302,7 +302,7 @@ Error_Handler();
   FreeRTOS_IPInit( ucIPAddress, ucNetMask, ucGatewayAddress, ucDNSServerAddress, ucMACAddress );
   vStartSimpleTCPServerTasks( 2000, 3 );    // TCP echo server
   vStartSimpleUDPServerTasks( 2000, 3 );    // responds to incoming UDP w outgoing USP
-  vStartSimpleUDPSenderTasks( 2000, 3 );  // periodically sends a message
+  //vStartSimpleUDPSenderTasks( 2000, 3 );  // periodically sends a message
 
   /* USER CODE END RTOS_EVENTS */
 
